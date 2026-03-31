@@ -1,6 +1,6 @@
 ---
 name: animation
-description: Animation WEB UNIQUEMENT — GSAP (scroll, text, SVG, transitions) et Three.js (3D, shaders, React Three Fiber). NE PAS utiliser pour le mobile (React Native utilise react-native-reanimated, voir le skill expo).
+description: Animation WEB UNIQUEMENT — GSAP (scroll, text, SVG, transitions, plugins, timelines, utils, performance), Three.js (3D, shaders, React Three Fiber), Remotion (vidéo React). NE PAS utiliser pour le mobile (React Native utilise react-native-reanimated, voir le skill expo).
 ---
 
 # Animation Web
@@ -14,7 +14,20 @@ Guides pour les animations **web uniquement** (Next.js / React).
 
 ---
 
-## GSAP + Next.js / React (web only)
+## GSAP — Skills officiels
+
+| Sujet | Fichier |
+|-------|---------|
+| Core API (gsap.to, from, fromTo, easing, stagger, matchMedia) | [gsap-core/SKILL.md](gsap-core/SKILL.md) |
+| Timelines (gsap.timeline, position parameter, nesting, playback) | [gsap-timeline/SKILL.md](gsap-timeline/SKILL.md) |
+| ScrollTrigger (scroll-linked, pinning, scrub) | [gsap-scrolltrigger/SKILL.md](gsap-scrolltrigger/SKILL.md) |
+| Plugins (ScrollTo, Flip, Draggable, SplitText, SVG, CustomEase...) | [gsap-plugins/SKILL.md](gsap-plugins/SKILL.md) |
+| React / Next.js (useGSAP, refs, cleanup) | [gsap-react/SKILL.md](gsap-react/SKILL.md) |
+| Vue / Svelte / autres frameworks | [gsap-frameworks/SKILL.md](gsap-frameworks/SKILL.md) |
+| Utils (clamp, mapRange, snap, toArray, wrap, pipe) | [gsap-utils/SKILL.md](gsap-utils/SKILL.md) |
+| Performance (transforms, will-change, batching, 60fps) | [gsap-performance/SKILL.md](gsap-performance/SKILL.md) |
+
+## GSAP — Expert custom (Next.js / React)
 
 | Sujet | Fichier |
 |-------|---------|
@@ -43,3 +56,9 @@ Guides pour les animations **web uniquement** (Next.js / React).
 | Post-processing (bloom, DOF, effets) | [threejs/threejs-postprocessing/SKILL.md](threejs/threejs-postprocessing/SKILL.md) |
 | Interactions (raycasting, contrôles, input) | [threejs/threejs-interaction/SKILL.md](threejs/threejs-interaction/SKILL.md) |
 | Animations (keyframes, skeletal, morph) | [threejs/threejs-animation/SKILL.md](threejs/threejs-animation/SKILL.md) |
+
+## Remotion (vidéo en React)
+
+| Sujet | Fichier |
+|-------|---------|
+| Best practices (composition, séquences, rendu) | [remotion-best-practices/SKILL.md](remotion-best-practices/SKILL.md) |
