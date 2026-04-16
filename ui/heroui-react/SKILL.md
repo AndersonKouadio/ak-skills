@@ -232,3 +232,187 @@ node scripts/get_theme.mjs
 ```
 
 For detailed theming, fetch: `https://heroui.com/docs/react/getting-started/theming.mdx`
+
+---
+
+## Workflow obligatoire : Mapper la maquette aux composants AVANT de coder
+
+**Ce workflow est OBLIGATOIRE pour chaque ecran/feature/composant a implementer.**
+
+### Etape 1 — Analyser la maquette
+Identifier chaque element visuel (header, cards, listes, inputs, boutons, separateurs, tabs, badges, avatars, etc.)
+
+### Etape 2 — Mapper chaque element au composant HeroUI v3
+- Lister les composants : `node scripts/list_components.mjs`
+- Chercher la doc : `node scripts/get_component_docs.mjs NomComposant`
+
+### Etape 3 — Verifier la customisabilite
+Pour chaque composant mappe, confirmer qu'il peut etre style pour matcher la maquette pixel-perfect :
+- Consulter la doc (`node scripts/get_component_docs.mjs NomComposant`)
+- Verifier : `className`, slots, render props
+- Si un composant ne peut PAS etre customise → signaler comme construction manuelle
+
+### Etape 4 — Presenter le mapping a l'utilisateur
+Deux sections :
+- ✅ **Composants librairie** : tel element → tel composant HeroUI (customizable ✓)
+- 🔧 **Constructions manuelles** : tel element → pas de composant dispo OU non customizable, voici la contrainte
+
+### Etape 5 — Demander validation
+- UNIQUEMENT pour les constructions manuelles ou les cas douteux
+- Si le mapping a deja ete valide pour un pattern similaire, ne pas redemander
+- L'utilisateur peut aider a trouver un composant sur le site de la librairie
+
+### Etape 6 — Ne coder qu'apres validation des constructions manuelles
+
+### Correspondances systematiques (deja validees)
+
+| Element maquette | Composant HeroUI v3 |
+|---|---|
+| Bouton action | `Button` (variant: primary/secondary/tertiary/danger/ghost/outline) |
+| Lien texte / action low-emphasis | `Link` |
+| Champ formulaire | `TextField` + `Input` + `Label` + `FieldError` |
+| Zone texte multilignes | `TextArea` |
+| Champ recherche | `SearchField` |
+| Champ numerique | `NumberField` |
+| Champ date | `DateField` / `DatePicker` |
+| Champ heure | `TimeField` |
+| Select / Dropdown | `Select` + `Select.Trigger` + `Select.Value` + `Select.Popover` + `ListBox` + `ListBox.Item` |
+| Combobox / Autocomplete | `ComboBox` |
+| Checkbox | `Checkbox` + `Checkbox.Indicator` |
+| Groupe checkboxes | `CheckboxGroup` |
+| Radio buttons | `RadioGroup` + `RadioGroup.Item` |
+| Toggle switch | `Switch` |
+| Tabs / onglets | `Tabs` |
+| Card / Surface | `Card` + `Card.Header` + `Card.Content` |
+| Modale | `Modal` |
+| Dialog confirmation | `AlertDialog` |
+| Drawer / panneau lateral | `Drawer` |
+| Toast / notification | `toast()` / `toast.success()` / `toast.danger()` + `Toast.Provider` |
+| Spinner chargement | `Spinner` |
+| Skeleton loading | `Skeleton` |
+| Avatar | `Avatar` |
+| Badge / tag statut | `Chip` |
+| Tag group | `TagGroup` + `TagGroup.Item` |
+| Separateur / divider | `Separator` |
+| Barre de progression | `ProgressBar` |
+| Progression circulaire | `ProgressCircle` |
+| Tooltip | `Tooltip` |
+| Popover | `Popover` |
+| Accordion / disclosure | `Accordion` ou `Disclosure` / `DisclosureGroup` |
+| Pagination | `Pagination` |
+| Table de donnees | `Table` |
+| Breadcrumbs | `Breadcrumbs` |
+| OTP input | `InputOTP` |
+| Slider | `Slider` |
+| Clavier raccourci | `Kbd` |
+| Bouton fermer | `CloseButton` |
+| Menu contextuel | `Dropdown` |
+| Navbar / navigation | **SUPPRIME en v3** → construire avec `<nav>` + Tailwind + `Link`/`Button` |
+| Code inline | **SUPPRIME en v3** → utiliser `<code>` HTML |
+| Snippet | **SUPPRIME en v3** → construire manuellement |
+| Image | **SUPPRIME en v3** → utiliser `<img>` ou Next.js `Image` |
+
+---
+
+## Pieges & Regles (lecons apprises)
+
+### Button
+- **PAS de prop `color`** → utiliser `variant` (`primary`, `secondary`, `tertiary`, `outline`, `ghost`, `danger`, `danger-soft`)
+- **PAS de prop `size`** → utiliser `className` Tailwind (`text-sm px-3`, `text-lg px-6`)
+- **PAS de prop `radius`** → utiliser `className` Tailwind (`rounded-full`, `rounded-lg`)
+- **PAS de prop `isIconOnly`** → styler le bouton directement
+- **`onPress`** au lieu de `onClick` sur tous les composants interactifs HeroUI
+- **`isDisabled`** (pas `disabled`) sur les composants HeroUI
+
+### Select (v3 compound pattern)
+```tsx
+// ❌ FAUX — v2 pattern
+<Select label="Choix"><SelectItem key="a">Option A</SelectItem></Select>
+
+// ✅ CORRECT — v3 compound
+<Select>
+  <Label>Choix</Label>
+  <Select.Trigger><Select.Value /><Select.Indicator /></Select.Trigger>
+  <Select.Popover>
+    <ListBox>
+      <ListBox.Item id="a" textValue="Option A">Option A</ListBox.Item>
+    </ListBox>
+  </Select.Popover>
+</Select>
+```
+
+### Input / TextField (v3)
+```tsx
+// ❌ FAUX — v2 pattern
+<Input label="Email" variant="bordered" isRequired labelPlacement="inside" />
+
+// ✅ CORRECT — v3 compound ou Input seul
+<TextField isRequired>
+  <Label>Email</Label>
+  <Input placeholder="email" type="email" />
+  <FieldError />
+</TextField>
+
+// Ou Input seul (sans label/error)
+<Input placeholder="email" type="email" required />
+```
+
+### Toast (v3)
+```tsx
+// ❌ FAUX — addToast n'existe pas
+import { addToast } from "@heroui/toast";
+addToast({ title: "Succes", color: "success" });
+
+// ✅ CORRECT — toast() depuis @heroui/react
+import { toast } from "@heroui/react";
+toast("Message simple");
+toast.success("Operation reussie");
+toast.danger("Erreur survenue");
+toast.warning("Attention");
+toast.info("Information");
+
+// Setup : ajouter Toast.Provider dans le layout
+import { Toast } from "@heroui/react";
+<Toast.Provider placement="top end" />
+```
+
+### Card (v3 compound)
+```tsx
+<Card>
+  <Card.Header>
+    <Card.Title>Titre</Card.Title>
+    <Card.Description>Description</Card.Description>
+  </Card.Header>
+  <Card.Content>Contenu</Card.Content>
+  <Card.Footer>Actions</Card.Footer>
+</Card>
+```
+
+### Dropdown / Menu (v3)
+```tsx
+<Dropdown>
+  <Dropdown.Trigger asChild>
+    <Button>Menu</Button>
+  </Dropdown.Trigger>
+  <Dropdown.Content>
+    <Dropdown.Item>Option 1</Dropdown.Item>
+    <Dropdown.Item>Option 2</Dropdown.Item>
+  </Dropdown.Content>
+</Dropdown>
+```
+
+### Composants SUPPRIMES en v3
+| v2 | Remplacement v3 |
+|---|---|
+| `Navbar` | `<nav>` HTML + Tailwind CSS |
+| `Code` | `<code>` HTML |
+| `Snippet` | Construction manuelle |
+| `Image` | `<img>` ou Next.js `Image` |
+| `User` | Construction manuelle |
+| `Spacer` | `<div className="h-4">` ou gap Tailwind |
+| `Ripple` | Effet CSS ou Button avec ripple |
+
+### Styling
+- **`className`** au lieu de `classNames` (v2 → v3)
+- **Classes utilitaires** : `text-tiny` → `text-xs`, `text-small` → `text-sm`, `rounded-small` → `rounded-sm`
+- **Couleurs** : `bg-primary` → `bg-accent` (systeme couleurs v3)

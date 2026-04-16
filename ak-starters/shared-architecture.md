@@ -24,6 +24,14 @@ features/{name}/
 | `filters/` | Oui (Nuqs) | Oui (Nuqs) | Non | URL state (filtres, pagination) |
 | `actions/` | Non | Oui | Non | Server Actions (Prisma) |
 
+### Limite de taille des fichiers
+
+**Un fichier composant ne doit JAMAIS dépasser 150 lignes.** Si un fichier dépasse cette limite :
+- Extraire les sous-composants dans des fichiers séparés dans le même dossier `components/`
+- Extraire les hooks/logique dans `hooks/`
+- Extraire les types dans `types/`
+- Extraire les constantes/mock data dans `utils/` ou `mocks/`
+
 ### ERREUR courante
 
 `services/` n'existe PAS. C'est toujours `apis/`. Si un projet existant utilise `services/`, c'est une dette technique à corriger lors du refactoring.
